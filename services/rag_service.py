@@ -29,11 +29,12 @@ class RAGService:
         
         # Ollama endpoint
         self.ollama_url = "http://localhost:11434/api/generate"
-        self.ollama_model = "phi"  # or "llama3.2:3b" when you have it
+        self.ollama_model = "llama3.2:3b"  # Changed to Llama 3.2
         self.ollama_available = self._check_ollama()
         
         logger.info(f"RAG service ready. Collection count: {self.collection.count()}")
         logger.info(f"Ollama available: {self.ollama_available}")
+        logger.info(f"Ollama model: {self.ollama_model}")
     
     def _check_ollama(self) -> bool:
         """Check if Ollama server is running."""

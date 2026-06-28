@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
 from typing import Optional
 from services.multimodal_service import MultiModalService
@@ -14,7 +14,7 @@ class MultiModalResponse(BaseModel):
 @router.post("/analyze", response_model=MultiModalResponse)
 async def analyze_diagram(
     image: UploadFile = File(...),
-    query: Optional[str] = None
+    query: Optional[str] = Form(None) 
 ):
     try:
         result = multimodal_service.process(
