@@ -46,7 +46,8 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("📊 System Status")
 st.sidebar.markdown("📘 Documentation")
 
-API_BASE = "http://localhost:8000"
+# ---------- API BASE URL (READ FROM SECRETS) ----------
+API_BASE = st.secrets.get("API_BASE", "http://localhost:8000")
 
 # ---------- PAGES ----------
 def rag_page():
@@ -142,7 +143,6 @@ def multi_modal_page():
     st.markdown('<h2 class="primary-text">🖼️ Diagram Analyzer</h2>', unsafe_allow_html=True)
     with st.container():
         st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        # Use a form to ensure query is submitted together with file
         with st.form(key="multi_form"):
             uploaded_file = st.file_uploader("Drop an image (PNG, JPG, SVG)", type=["png", "jpg", "jpeg", "svg"])
             query = st.text_input("Question about the diagram (optional):", placeholder="What does this diagram show?")
@@ -153,10 +153,8 @@ def multi_modal_page():
         with st.spinner("Analyzing..."):
             try:
                 files = {"image": uploaded_file}
-                # Only send query if not empty
                 data = {"query": query} if query and query.strip() else {}
-                # Debug: show what we're sending
-                st.write(f"Sending query: '{query}'")  # This will appear in UI for debugging
+                st.write(f"Sending query: '{query}'")
                 res = requests.post(f"{API_BASE}/multi-modal/analyze", files=files, data=data)
                 if res.status_code == 200:
                     data = res.json()
